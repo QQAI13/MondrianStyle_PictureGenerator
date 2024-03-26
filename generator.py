@@ -2,7 +2,7 @@ import random
 import tkinter
 
 # red, yellow, blue, white ...
-color_array = ['#CD3333' , '#FFD700' , '#0000FF' , 'white' , 'black' , 'gray' , 'white']
+color_array = ['#CD3333' , '#FFD700' , '#0000FF' , 'white' , 'black' , 'gray' , 'white' , 'white']
 
 
 def print_colored_text(text, color_code=37):
@@ -39,9 +39,9 @@ def canvas_generator():
     counter += 1
     random.seed( random.random() * counter )
     if square_nums == -1 or square_nums == None:
-        square_nums = random.randint(5 , 13)
+        square_nums = random.randint(5 , 8)
     else:
-        square_nums = random.randint(5 , 13)
+        square_nums = random.randint(5 , 8)
     canvas.delete("all")
     min_height = 0
     max_height = 610
@@ -52,6 +52,7 @@ def canvas_generator():
                      top = min_height, bot = max_height, n=1)
     canvas.pack()
     
+main_color_uesd = [False , False , False , False , False , False , False , False]
 
 def square_recursive(canvas, max, left, right, top, bot, n):
     global length
@@ -59,10 +60,17 @@ def square_recursive(canvas, max, left, right, top, bot, n):
     if n == max:
         print_colored_text(f"# of squares exceed ... Finished!" , 31)
         return
-    dir = random.randint(1 , 3)
-    depth_dir = random.randint(1 , 3)
-    color_code = random.randint(0 , 5)
+    dir = random.randint(1 , 37)
+    if dir % 3 == 0 and n > 3:
+        return
+    color_code = random.randint(0 , 7)
+    if n > 3 and False in main_color_uesd[0:2]:
+        for i in range(0 , 3):
+            if main_color_uesd[i] == False:
+                color_code = i
+                break
     color = color_array[color_code]
+    main_color_uesd[color_code] = True
     width = 10
     if dir % 2 == 0: 
         # Horizontal
@@ -72,12 +80,10 @@ def square_recursive(canvas, max, left, right, top, bot, n):
             return
         print_colored_text(f"Midpoint for horizontal is {midpoint}", 30)
         canvas.create_line(left, midpoint, right, midpoint, width=width, fill="black")
-        if depth_dir % 2 == 0: # Lower block
-            canvas.create_rectangle(left, midpoint, right, bot, fill=color , width=width, outline="black")
-            square_recursive(canvas, max, left, right, midpoint, bot, n+1)
-        else: # Upper block
-            canvas.create_rectangle(left, top, right, midpoint, fill=color , width=width, outline="black")
-            square_recursive(canvas, max, left, right, top, midpoint, n+1)
+        canvas.create_rectangle(left, midpoint, right, bot, fill=color , width=width, outline="black")
+        square_recursive(canvas, max, left, right, midpoint, bot, n+1)
+        canvas.create_rectangle(left, top, right, midpoint, fill=color , width=width, outline="black")
+        square_recursive(canvas, max, left, right, top, midpoint, n+1)
     else: 
         # Vertical
         try:
@@ -86,9 +92,7 @@ def square_recursive(canvas, max, left, right, top, bot, n):
             return
         print_colored_text(f"Midpoint for vertical is {midpoint}", 30)
         canvas.create_line(midpoint, top, midpoint, bot, width=width, fill="black")
-        if depth_dir % 2 == 0: # Left-side block
-            canvas.create_rectangle(left, top, midpoint, bot, fill=color , width=width,  outline="black")
-            square_recursive(canvas, max, left, midpoint, top, bot, n+1)
-        else: # Right-side block
-            canvas.create_rectangle(midpoint, top, right, bot, fill=color , width=width, outline="black")
-            square_recursive(canvas, max, midpoint, right, top, bot, n+1)
+        canvas.create_rectangle(left, top, midpoint, bot, fill=color , width=width,  outline="black")
+        square_recursive(canvas, max, left, midpoint, top, bot, n+1)
+        canvas.create_rectangle(midpoint, top, right, bot, fill=color , width=width, outline="black")
+        square_recursive(canvas, max, midpoint, right, top, bot, n+1)
