@@ -1,17 +1,17 @@
 # Mondrian Style Picture Generator
 
-Created it during the break time after I learned the design history course :P
+Created this during my break after studying design history! :P
 
 ## Who is Mondrian?
-- [WikiArt](https://www.wikiart.org/en/piet-mondrian)
+- Chekout here: [WikiArt](https://www.wikiart.org/en/piet-mondrian)
 
-- His most famous artwork: 
+- One of his most famous artworks: 
 
     ![alt text](image.png)
 
 ## Usage:
 
-You can download the whole project and run the main.py
+Simply download the entire repository and run main.py:
 
 ```
 python3 main.py
